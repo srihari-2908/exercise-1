@@ -1,0 +1,8 @@
+name: Issues WF
+on: issues
+jobs:
+  op-info:
+    runs-on: ubuntu-latest
+    steps:
+    - name: o/p of github context
+      run: echo "${{ toJson(github) }}"
