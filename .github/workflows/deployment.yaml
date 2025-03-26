@@ -1,7 +1,7 @@
 name: Deployment Example 1
 on: push
 jobs:
-  deploy:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -10,9 +10,22 @@ jobs:
       run: npm install
     - name: Lint
       run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install Dependencies
+      run: npm install
     - name: Test
       run: npm run test
-    - name: Build code
-      run: npm run build
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install Dependencies
+      run: npm install
     - name: Deploy code
       run: echo "Deploying code to server"
