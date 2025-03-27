@@ -32,4 +32,4 @@ jobs:
     - name: Install Dependencies
       run: npm install
     - name: Deploy code
-      run: echo "Deploying code to server"
+      run: echo "Deploying code to server....."
