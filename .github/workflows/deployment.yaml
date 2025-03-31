@@ -17,7 +17,7 @@ jobs:
         path: ~/.npm
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
     - name: Lint
       run: npm run lint
   test:
@@ -34,7 +34,7 @@ jobs:
         path: ~/.npm
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
     - name: Test
       run: npm run test
     - name: Build website
