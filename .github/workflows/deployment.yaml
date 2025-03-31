@@ -18,6 +18,8 @@ jobs:
   test:
     needs: [lint]
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }}
     steps:
     - name: Checkout1
       uses: actions/checkout@v3
@@ -34,6 +36,9 @@ jobs:
         path: |
           dist
           package.json
+    - name: publish JS filename
+      id: publish
+      run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
   deploy:
     needs: [lint, test]
     runs-on: ubuntu-latest
@@ -44,5 +49,7 @@ jobs:
         name: build-artifact
     - name: Output content
       run: ls
+    - name: Output fine name
+      run: echo "${{ needs.test.outputs.script-file }}"
     - name: Deploy code
       run: echo "Deploying code to server....."
