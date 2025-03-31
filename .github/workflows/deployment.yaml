@@ -16,6 +16,7 @@ jobs:
     - name: Lint
       run: npm run lint
   test:
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout1
@@ -27,7 +28,7 @@ jobs:
     - name: Build website
       run: npm run build
     - name: upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifact
         path: |
