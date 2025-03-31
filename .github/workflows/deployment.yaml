@@ -62,4 +62,4 @@ jobs:
     - name: Output fine name
       run: echo "${{ needs.test.outputs.script-file }}"
     - name: Deploy code
-      run: echo "Deploying code to server....."
+      run: echo "Deploying code to server.."
