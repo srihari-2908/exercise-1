@@ -23,6 +23,15 @@ jobs:
       run: npm install
     - name: Test
       run: npm run test
+    - name: Build website
+      run: npm run build
+    - name: upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifact
+        path: |
+          dist
+          package.json
   deploy:
     needs: [lint, test]
     runs-on: ubuntu-latest
