@@ -39,10 +39,10 @@ jobs:
       id: test-npm
       run: npm run test
     - name: Build website
-      if: failure() && steps.test-npm.outcome == 'failure'
+      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       run: npm run build
     - name: upload artifacts
-      if: failure() && steps.test-npm.outcome == 'failure'
+      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: build-artifact
@@ -50,7 +50,7 @@ jobs:
           dist
           package.json
     - name: publish JS filename
-      if: failure() && steps.test-npm.outcome == 'failure'
+      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       id: publish
       run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
   deploy:
