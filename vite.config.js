@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), eslint()],
   test: {
     globals: true,
-    envirnment: 'jsdom',
+    environment: 'jsdom',
     setupFiles: './src/test/setup.js',
   },
 });
