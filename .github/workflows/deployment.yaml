@@ -17,7 +17,9 @@ jobs:
       uses: actions/cache@v3
       id: cache-npm
       with:
-        path: ~/.npm
+        path: |
+          ~/.npm
+          node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Lint
       run: npm run lint
@@ -33,7 +35,9 @@ jobs:
       id: cache-npm
       uses: actions/cache@v3
       with:
-        path: ~/.npm
+        path: |
+          ~/.npm
+          node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install Dependencies
       if: steps.cache-npm.outputs.cache-hit != 'true'
