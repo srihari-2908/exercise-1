@@ -1,4 +1,4 @@
-name: Deployment Example 1
+name: Deployment Example matrix
 on:
   workflow_dispatch:
 jobs:
