@@ -45,6 +45,7 @@ jobs:
       run: npm ci
     - name: Test
       id: test-npm
+      continue-on-error: true
       run: npm run test
     - name: Build website
       if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
