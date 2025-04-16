@@ -6,6 +6,8 @@ on:
       - opened
   push:
 jobs:
+  using_reusable_workflow:
+    uses: ./.github/workflows/reusable.yaml
   lint:
     runs-on: ubuntu-latest
     steps:
