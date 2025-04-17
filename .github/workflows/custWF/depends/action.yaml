@@ -1,7 +1,7 @@
 name: Custom Action
-description: 'This composite action, will do Checkout, Cache and Install dependencies'
+description: 'This composite action will do Cache and Install dependencies'
 inputs:
-  cache:  # id of input
+  cache:
     description: 'Need to cache dependencies or not'
     required: false
     default: 'true'
@@ -12,8 +12,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v3
     - name: Cache dependencies
       if: ${{ inputs.cache == 'true' }}
       uses: actions/cache@v3
@@ -21,10 +19,11 @@ runs:
       with:
         path: ~/.npm
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+
     - name: Install Dependencies
       id: install-deps
-      if: ${{ cache.outputs.cache-hit != 'true' }} || ${{ inputs.cache != 'true' }}
       run: |
+        echo "Cache used: ${{ steps.cache.outputs.cache-hit }}"
         npm ci
-        echo "cache-used=${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+        echo "cache-used=${{ steps.cache.outputs.cache-hit || 'false' }}" >> $GITHUB_OUTPUT
       shell: bash
