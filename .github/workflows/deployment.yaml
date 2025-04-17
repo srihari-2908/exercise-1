@@ -6,24 +6,13 @@ on:
       - opened
   push:
 jobs:
-  using_reusable_workflow:
-    uses: ./.github/workflows/reusable.yaml
   lint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      id: cache-npm
+    - name: Checkout, Cache and Install dependencies
+      uses: ./.github/workflows/custWF/depends/
       with:
-        path: |
-          ~/.npm
-          node_modules
-        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-    - name: Install Dependencies
-      if: steps.cache-npm.outputs.cache-hit != 'true'
-      run: npm ci
+        cache: false
     - name: Lint
       run: npm run lint
   test:
@@ -32,28 +21,13 @@ jobs:
     outputs:
       script-file: ${{ steps.publish.outputs.script-file }}
     steps:
-    - name: Checkout1
-      uses: actions/checkout@v3
-    - name: Cache dependencies
-      id: cache-npm
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.npm
-          node_modules
-        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-    - name: Install Dependencies
-      if: steps.cache-npm.outputs.cache-hit != 'true'
-      run: npm ci
+    - name: Checkout, Cache and Install dependencies
+      uses: ./.github/workflows/custWF/depends/
     - name: Test
-      id: test-npm
-      continue-on-error: true
       run: npm run test
     - name: Build website
-      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       run: npm run build
     - name: upload artifacts
-      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: build-artifact
@@ -61,7 +35,6 @@ jobs:
           dist
           package.json
     - name: publish JS filename
-      if: failure() && steps.test-npm.outcome == 'failure' || steps.test-npm.outcome == 'success'
       id: publish
       run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
   deploy:
