@@ -21,9 +21,10 @@ runs:
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install Dependencies
+      run: npm ci
+      shell: bash
+    
+    - name: Output cache used
       id: install-deps
-      run: |
-        echo "Cache used: ${{ steps.cache.outputs.cache-hit }}"
-        npm ci
-        echo "cache-used=${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+      run: echo "Cache used: ${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
       shell: bash
