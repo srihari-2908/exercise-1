@@ -1,35 +1,25 @@
-name: Windows Test WF
+name: Test Windows Self-Hosted Runner
 
 on:
-  workflow_dispatch
+  workflow_dispatch: # Manual trigger from GitHub UI
 
 jobs:
-  test:
-    runs-on: self-hosted
+  test-windows:
+    runs-on: [self-hosted, windows]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Print some greetings
-        run: echo "Hello, world!"
-        shell: cmd
-        
-      - name: Print OS information
-        shell: pwsh
+      - name: Print runner info
         run: |
-          echo "OS Name: $env:OS"
-          echo "OS Version: $env:OS_VERSION"
-          echo "OS Architecture: $env:PROCESSOR_ARCHITECTURE"
+          echo "Runner Name: $env:RUNNER_NAME"
+          echo "OS: $env:RUNNER_OS"
+          echo "Arch: $env:RUNNER_ARCH"
 
-      - name: Print current directory
-        shell: pwsh
-        run: "echo 'Current directory: $env:GITHUB_WORKSPACE'"
+      - name: Check PowerShell Version
+        run: $PSVersionTable
 
-      - name: Print environment variables
-        shell: pwsh
+      - name: List Files in C:\
+        run: Get-ChildItem -Path C:\ -Force
+
+      - name: Test File Write
         run: |
-          echo "Environment Variables:"
-          Get-ChildItem Env:
-          foreach ($var in Get-ChildItem Env:) {
-            Write-Host "$($var.Name) = $($var.Value)"
-          }
+          $content = "Hello from GitHub Actions on $(hostname)"
+          Set-Content -Path "$env:USERPROFILE\Desktop\test-runner.txt" -Value $content
