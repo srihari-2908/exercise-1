@@ -12,7 +12,8 @@ jobs:
 
       - name: Print some greetings
         run: echo "Hello, world!"
-
+        shell: pwsh
+        
       - name: Print OS information
         shell: pwsh
         run: |
