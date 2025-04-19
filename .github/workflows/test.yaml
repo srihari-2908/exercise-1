@@ -1,12 +1,15 @@
 name: Test Windows Self-Hosted Runner
 
 on:
-  workflow_dispatch: # Manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   test-windows:
     runs-on: [self-hosted, windows]
     steps:
+      - name: Allow PowerShell script execution temporarily
+        run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+
       - name: Print runner info
         run: |
           echo "Runner Name: $env:RUNNER_NAME"
